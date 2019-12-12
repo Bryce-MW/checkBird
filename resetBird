@@ -1,0 +1,14 @@
+#! /bin/zsh
+
+if [ "$1" = "van" ]; then
+	echo "Vancouver"
+	ssh bgp-router00-van.van.thenetworknerds.ca "sudo birdc restart ${2:=all}; sudo birdc show proto | tail +2 | grep -e Name -e BGP"
+fi
+if [ "$1" = "fmt" ]; then
+	echo "\nFremont"
+	ssh bgp-router00-fmt.fmt.thenetworknerds.ca "sudo birdc restart ${2:=all}; sudo birdc show proto | tail +2 | grep -e Name -e BGP"
+fi
+if [ "$1" = "ams" ]; then
+	echo "\nAms"
+	ssh bgp-router00-ams.ams.thenetworknerds.ca "sudo birdc restart ${2:=all}; sudo birdc show proto | tail +2 | grep -e Name -e BGP"
+fi

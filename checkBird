@@ -1,0 +1,26 @@
+#! /bin/zsh
+
+
+if [ "${1:=all}" = "all" ]; then
+echo "Vancouver"
+ssh bgp-router00-van.van.thenetworknerds.ca "sudo birdc show proto | tail +2 | grep -e Name -e BGP"
+echo "\nFremont"
+ssh bgp-router00-fmt.fmt.thenetworknerds.ca "sudo birdc show proto | tail +2 | grep -e Name -e BGP"
+echo "\nAms"
+ssh bgp-router00-ams.ams.thenetworknerds.ca "sudo birdc show proto | tail +2 | grep -e Name -e BGP"
+fi
+
+if [ "${1:=all}" = "van" ]; then
+echo "Vancouver"
+ssh bgp-router00-van.van.thenetworknerds.ca "sudo birdc show proto | tail +2 | grep -e Name -e BGP"
+fi
+
+if [ "${1:=all}" = "fmt" ]; then
+echo "\nFremont"
+ssh bgp-router00-fmt.fmt.thenetworknerds.ca "sudo birdc show proto | tail +2 | grep -e Name -e BGP"
+fi
+
+if [ "${1:=all}" = "ams" ]; then
+echo "\nAms"
+ssh bgp-router00-ams.ams.thenetworknerds.ca "sudo birdc show proto | tail +2 | grep -e Name -e BGP"
+fi
