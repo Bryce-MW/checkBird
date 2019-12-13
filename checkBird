@@ -1,26 +1,19 @@
 #! /bin/zsh
 
+hosts=${1:=all}
 
-if [ "${1:=all}" = "all" ]; then
-echo "Vancouver"
-ssh bgp-router00-van.van.thenetworknerds.ca "sudo birdc show proto | tail +2 | grep -e Name -e BGP"
-echo "\nFremont"
-ssh bgp-router00-fmt.fmt.thenetworknerds.ca "sudo birdc show proto | tail +2 | grep -e Name -e BGP"
-echo "\nAms"
-ssh bgp-router00-ams.ams.thenetworknerds.ca "sudo birdc show proto | tail +2 | grep -e Name -e BGP"
+if [ "$hosts" = "all" ]; then
+hosts=("hosts"/*)
+else
+hosts=("hosts"/$hosts)
 fi
 
-if [ "${1:=all}" = "van" ]; then
-echo "Vancouver"
-ssh bgp-router00-van.van.thenetworknerds.ca "sudo birdc show proto | tail +2 | grep -e Name -e BGP"
-fi
-
-if [ "${1:=all}" = "fmt" ]; then
-echo "\nFremont"
-ssh bgp-router00-fmt.fmt.thenetworknerds.ca "sudo birdc show proto | tail +2 | grep -e Name -e BGP"
-fi
-
-if [ "${1:=all}" = "ams" ]; then
-echo "\nAms"
-ssh bgp-router00-ams.ams.thenetworknerds.ca "sudo birdc show proto | tail +2 | grep -e Name -e BGP"
-fi
+for host in $hosts; do
+exec 6< "$host"
+read -r name <&6
+read -r hostname <&6
+echo "$name"
+ssh $hostname "sudo birdc show proto $2 | tail +2 | grep -e Name -e BGP"
+echo
+exec 6<&-
+done

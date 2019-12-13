@@ -13,7 +13,7 @@ exec 6< "$host"
 read -r name <&6
 read -r hostname <&6
 echo "$name"
-ssh $hostname "sudo birdc restart ${2:=all}; sudo birdc show proto | tail +2 | grep -e Name -e BGP"
+ssh $hostname -t "sudo nano /etc/bird/bird.conf"
 echo
 exec 6<&-
 done
