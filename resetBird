@@ -1,19 +1,3 @@
 #! /bin/zsh
 
-hosts=${1:=all}
-
-if [ "$hosts" = "all" ]; then
-hosts=("hosts"/*)
-else
-hosts=("hosts"/$hosts)
-fi
-
-for host in $hosts; do
-exec 6< "$host"
-read -r name <&6
-read -r hostname <&6
-echo "$name"
-ssh $hostname "sudo birdc restart ${2:=all}; sudo birdc show proto | tail +2 | grep -e Name -e BGP"
-echo
-exec 6<&-
-done
+./runRemoteScript scripts/reset $@

@@ -1,0 +1,4 @@
+#! /bin/zsh
+
+sudo birdc restart ${1:=all}
+sudo birdc show proto | tail +2 | grep -e Name -e BGP

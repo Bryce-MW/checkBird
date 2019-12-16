@@ -1,0 +1,25 @@
+#! /bin/zsh
+
+script=$1
+
+shift
+
+hosts=${1:=all}
+
+shift
+
+if [ "$hosts" = "all" ]; then
+hosts=("hosts"/*)
+else
+hosts=("hosts"/$hosts)
+fi
+
+for host in $hosts; do
+exec 6< "$host"
+read -r name <&6
+read -r hostname <&6
+echo "$name"
+eval "echo \"$(cat $script)\"" | ssh $hostname bash
+echo
+exec 6<&-
+done
