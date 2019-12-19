@@ -14,6 +14,9 @@ sudo nping -6 -c 5 --tcp -p 179 "'$ip'"
 
 echo
 interfaces="'$(echo '"'$(cat scripts/parseIPs)'"' | python3 - "$ip" "$(ip -br addr)")'"
+if [ -z "$VAR" ]; then
+exit 0
+fi
 echo "'"$interfaces"'"
 echo
 
@@ -21,3 +24,6 @@ echo "'"$interfaces"'" | while read -r interface
 do
 echo "'"$interface"'" | cut -d"'" "'" -f1 | xargs ip link show
 done
+
+echo
+ip neigh show "'$ip'"
