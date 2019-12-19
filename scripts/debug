@@ -1,0 +1,23 @@
+#! /bin/zsh
+
+pro=$1
+
+proto="'$(sudo birdc show proto all $pro | tail +2 | grep -v BIRD)'"
+
+echo "'"$proto"'"
+
+ip="'$(echo "$proto" | grep "Neighbor address" | cut -d"' '" -f7)'"
+
+echo
+ping -c 5 "'$ip'"
+sudo nping -6 -c 5 --tcp -p 179 "'$ip'"
+
+echo
+interfaces="'$(echo '"'$(cat scripts/parseIPs)'"' | python3 - "$ip" "$(ip -br addr)")'"
+echo "'"$interfaces"'"
+echo
+
+echo "'"$interfaces"'" | while read -r interface
+do
+echo "'"$interface"'" | cut -d"'" "'" -f1 | xargs ip link show
+done

@@ -1,0 +1,14 @@
+#! /bin/python3
+
+import ipaddress
+import sys
+
+IP = ipaddress.ip_address(sys.argv[1])
+
+lines = sys.argv[2].split("""\n""")
+for line in lines:
+	parts = line.split()
+	interface = parts[0]
+	ips = [ipaddress.ip_interface(i) for i in parts[2:] if IP in ipaddress.ip_interface(i).network]
+	if len(ips):
+		print(interface + " " + " ".join(str(i) for i in ips))
